@@ -54,7 +54,7 @@
 <meta property="og:image" content="http://yoursite.com/output_27_3.png">
 <meta property="og:image" content="http://yoursite.com/output_45_1.png">
 <meta property="og:image" content="http://yoursite.com/output_46_1.png">
-<meta property="og:updated_time" content="2017-01-09T12:56:42.000Z">
+<meta property="og:updated_time" content="2017-01-09T13:05:28.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="引言">
 <meta name="twitter:description" content="准备
@@ -355,12 +355,12 @@ dtype: int64
 </code></pre><p>接下来我们就可以根据时区信息和操作系统信息对数据进行分组了~</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">by_tz_os = cframe.groupby([<span class="string">'tz'</span>, operating_system])</span><br></pre></td></tr></table></figure>
 <p>接着我们可以通过size函数对分组结果进行技术（类似于我们上面应用的value_counts函数），并用unstack函数对计数结果进行重塑（显示起来会更好看点，不信大家自己试试不调用unstack函数）：</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">agg_counts = by_tz_os.size().unstack().fillna(<span class="number">0</span>)</span><br><span class="line">agg_counts[:<span class="number">2</span>]</span><br></pre></td></tr></table></figure>
-<div><br><table border="1" class="dataframe"><br>  <thead><br>    <tr style="text-align: right;"><br>      <th></th><br>      <th>Not Windows</th><br>      <th>Windows</th><br>    </tr><br>    <tr><br>      <th>tz</th><br>      <th></th><br>      <th></th><br>    </tr><br>  </thead><br>  <tbody><br>    <tr><br>      <th></th><br>      <td>245.0</td><br>      <td>276.0</td><br>    </tr><br>    <tr><br>      <th>Africa/Cairo</th><br>      <td>0.0</td><br>      <td>3.0</td><br>    </tr><br>  </tbody><br></table><br></div>
-
-
-
-<p>最后我们来选取最常出现的时区，为了达到这个目的，我们根据agg_counts中的行数构造了一个间接索引数据：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">agg_counts = by_tz_os.size().unstack().fillna(<span class="number">0</span>)</span><br><span class="line"><span class="keyword">print</span> agg_counts[:<span class="number">2</span>]</span><br></pre></td></tr></table></figure>
+<pre><code>              Not Windows  Windows
+tz                                
+                    245.0    276.0
+Africa/Cairo          0.0      3.0
+</code></pre><p>最后我们来选取最常出现的时区，为了达到这个目的，我们根据agg_counts中的行数构造了一个间接索引数据：</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 用于按升序排列</span></span><br><span class="line">indexer = agg_counts.sum(<span class="number">1</span>).argsort()</span><br><span class="line">indexer[:<span class="number">10</span>]</span><br></pre></td></tr></table></figure>
 <pre><code>tz
                                   24
@@ -375,13 +375,20 @@ America/Argentina/Cordoba         26
 America/Argentina/Mendoza         55
 dtype: int64
 </code></pre><p>然后我们通过take函数按照这个顺序截取了最后的10行：</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">count_subset = agg_counts.take(indexer)[<span class="number">-10</span>:]</span><br><span class="line">count_subset</span><br></pre></td></tr></table></figure>
-<div><br><table border="1" class="dataframe"><br>  <thead><br>    <tr style="text-align: right;"><br>      <th></th><br>      <th>Not Windows</th><br>      <th>Windows</th><br>    </tr><br>    <tr><br>      <th>tz</th><br>      <th></th><br>      <th></th><br>    </tr><br>  </thead><br>  <tbody><br>    <tr><br>      <th>America/Sao_Paulo</th><br>      <td>13.0</td><br>      <td>20.0</td><br>    </tr><br>    <tr><br>      <th>Europe/Madrid</th><br>      <td>16.0</td><br>      <td>19.0</td><br>    </tr><br>    <tr><br>      <th>Pacific/Honolulu</th><br>      <td>0.0</td><br>      <td>36.0</td><br>    </tr><br>    <tr><br>      <th>Asia/Tokyo</th><br>      <td>2.0</td><br>      <td>35.0</td><br>    </tr><br>    <tr><br>      <th>Europe/London</th><br>      <td>43.0</td><br>      <td>31.0</td><br>    </tr><br>    <tr><br>      <th>America/Denver</th><br>      <td>132.0</td><br>      <td>59.0</td><br>    </tr><br>    <tr><br>      <th>America/Los_Angeles</th><br>      <td>130.0</td><br>      <td>252.0</td><br>    </tr><br>    <tr><br>      <th>America/Chicago</th><br>      <td>115.0</td><br>      <td>285.0</td><br>    </tr><br>    <tr><br>      <th></th><br>      <td>245.0</td><br>      <td>276.0</td><br>    </tr><br>    <tr><br>      <th>America/New_York</th><br>      <td>339.0</td><br>      <td>912.0</td><br>    </tr><br>  </tbody><br></table><br></div>
-
-
-
-
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 继续通过matplotlib进行绘图，让我们能深刻的理解数字</span></span><br><span class="line"><span class="comment"># stacked设置为True使得Window与非Windows能组合在一个条形图里面，让我们更清晰的看到数据的对比</span></span><br><span class="line">count_subset.plot(kind = <span class="string">'barh'</span>, stacked=<span class="keyword">True</span>)</span><br></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">count_subset = agg_counts.take(indexer)[<span class="number">-10</span>:]</span><br><span class="line"><span class="keyword">print</span> count_subset</span><br></pre></td></tr></table></figure>
+<pre><code>                     Not Windows  Windows
+tz                                       
+America/Sao_Paulo           13.0     20.0
+Europe/Madrid               16.0     19.0
+Pacific/Honolulu             0.0     36.0
+Asia/Tokyo                   2.0     35.0
+Europe/London               43.0     31.0
+America/Denver             132.0     59.0
+America/Los_Angeles        130.0    252.0
+America/Chicago            115.0    285.0
+                           245.0    276.0
+America/New_York           339.0    912.0
+</code></pre><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 继续通过matplotlib进行绘图，让我们能深刻的理解数字</span></span><br><span class="line"><span class="comment"># stacked设置为True使得Window与非Windows能组合在一个条形图里面，让我们更清晰的看到数据的对比</span></span><br><span class="line">count_subset.plot(kind = <span class="string">'barh'</span>, stacked=<span class="keyword">True</span>)</span><br></pre></td></tr></table></figure>
 <pre><code>&lt;matplotlib.axes._subplots.AxesSubplot at 0x11e9a4890&gt;
 </code></pre><p><img src="output_45_1.png" alt="png"></p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 下面的数字太小的了，看不清楚，我们继续将数据进行归一化，让其“总值为1”</span></span><br><span class="line"><span class="comment"># America/New_York  339.0  912.0, 归一化就将： 339/(339+912)</span></span><br><span class="line">normed_subset = count_subset.div(count_subset.sum(<span class="number">1</span>), axis = <span class="number">0</span>)</span><br><span class="line">normed_subset.plot(kind = <span class="string">'barh'</span>, stacked=<span class="keyword">True</span>)</span><br></pre></td></tr></table></figure>
