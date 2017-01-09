@@ -464,7 +464,7 @@ Name: tz, dtype: int64
 
 
 &lt;matplotlib.axes._subplots.AxesSubplot at 0x1164690d0&gt;
-</code></pre><p><img src="output_27_3.png" alt="png"></p>
+</code></pre><p><img src="https://github.com/linxiaobin0816/linxiaobin0816.github.io/blob/master/categories/%E3%80%8A%E5%88%A9%E7%94%A8PANDAS%E8%BF%9B%E8%A1%8C%E6%95%B0%E6%8D%AE%E5%88%86%E6%9E%90%E3%80%8B/output_27_3.png" alt="png"></p>
 <p>除此之外，我们还可以利用Pandas对数据进行更多的处理，例如我们可以看到的是在数据中’a’字段并不止包含了一种信息，还包含着执行URL短缩操作的浏览器，还有程序相关信息：</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">frame[<span class="string">'a'</span>][<span class="number">1</span>]</span><br></pre></td></tr></table></figure>
 <pre><code>u&apos;GoogleMaps/RochesterNY&apos;
@@ -531,10 +531,10 @@ America/Chicago            115.0    285.0
 America/New_York           339.0    912.0
 </code></pre><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 继续通过matplotlib进行绘图，让我们能深刻的理解数字</span></span><br><span class="line"><span class="comment"># stacked设置为True使得Window与非Windows能组合在一个条形图里面，让我们更清晰的看到数据的对比</span></span><br><span class="line">count_subset.plot(kind = <span class="string">'barh'</span>, stacked=<span class="keyword">True</span>)</span><br></pre></td></tr></table></figure>
 <pre><code>&lt;matplotlib.axes._subplots.AxesSubplot at 0x11e9a4890&gt;
-</code></pre><p><img src="output_45_1.png" alt="png"></p>
+</code></pre><p><img src="https://github.com/linxiaobin0816/linxiaobin0816.github.io/blob/master/categories/%E3%80%8A%E5%88%A9%E7%94%A8PANDAS%E8%BF%9B%E8%A1%8C%E6%95%B0%E6%8D%AE%E5%88%86%E6%9E%90%E3%80%8B/output_45_1.png" alt="png"></p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 下面的数字太小的了，看不清楚，我们继续将数据进行归一化，让其“总值为1”</span></span><br><span class="line"><span class="comment"># America/New_York  339.0  912.0, 归一化就将： 339/(339+912)</span></span><br><span class="line">normed_subset = count_subset.div(count_subset.sum(<span class="number">1</span>), axis = <span class="number">0</span>)</span><br><span class="line">normed_subset.plot(kind = <span class="string">'barh'</span>, stacked=<span class="keyword">True</span>)</span><br></pre></td></tr></table></figure>
 <pre><code>&lt;matplotlib.axes._subplots.AxesSubplot at 0x11e3bea10&gt;
-</code></pre><p><img src="output_46_1.png" alt="png"></p>
+</code></pre><p><img src="https://github.com/linxiaobin0816/linxiaobin0816.github.io/blob/master/categories/%E3%80%8A%E5%88%A9%E7%94%A8PANDAS%E8%BF%9B%E8%A1%8C%E6%95%B0%E6%8D%AE%E5%88%86%E6%9E%90%E3%80%8B/output_46_1.png" alt="png"></p>
 <p>不知道这些函数哪里出来的？没事~先了解下Pandas是干啥的，后面每个函数都会讲解的哈~</p>
 
           
